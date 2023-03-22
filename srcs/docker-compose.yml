@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3"
 
 services:
   nginx:
@@ -11,6 +11,8 @@ services:
       - wordpress_data:/var/www/html
     depends_on:
       - wordpress
+      - adminer
+      - ftp
     networks:
       - inception_network
 
@@ -44,6 +46,37 @@ services:
     restart: always
     networks:
       - inception_network
+  
+  adminer:
+    build: requirements/bonus/adminer
+    image: adminer
+    restart: always
+    networks:
+      - inception_network
+    depends_on:
+      - mariadb
+  
+  redis_cache:
+    build: requirements/bonus/redis_cache
+    image: redis_cache
+    restart: always
+    networks:
+      - inception_network
+  ftp:
+    build: requirements/bonus/ftp_server
+    image: ftp
+    restart: always
+    ports:
+      - "21:21"
+      - "40000-40009:40000-40009"
+    env_file:
+      - .env
+    volumes:
+      - wordpress_data:/content
+    networks:
+      - inception_network
+    depends_on:
+      - wordpress
 
 volumes:
   wordpress_data:

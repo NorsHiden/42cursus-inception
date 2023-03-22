@@ -1,8 +1,8 @@
 all:
-	@docker-compose --project-directory srcs up --build
+	@cd srcs; docker-compose up --build
 
 stop:
-	@docker-compose --project-directory srcs down
+	@cd srcs; docker-compose --project-directory srcs down
 
 clean:
 	@docker rm -f $(docker ps -aq)

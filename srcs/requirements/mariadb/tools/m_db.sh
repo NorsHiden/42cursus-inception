@@ -12,4 +12,4 @@ mysql < db1.sql
 
 kill $(cat /var/run/mysqld/mysqld.pid)
 
-mysqld_safe --bind-address=0.0.0.0
+mysqld --bind-address=0.0.0.0
