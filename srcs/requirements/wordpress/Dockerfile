@@ -2,7 +2,7 @@ FROM debian:buster
 
 # Install required packages
 RUN apt-get update && \
-    apt-get install -y curl php php-fpm php-mysql mariadb-client php-curl php-gd php-json php-mbstring php-xml php-zip sendmail
+    apt-get install -y curl php php-redis php-fpm php-mysql mariadb-client php-curl php-gd php-json php-mbstring php-xml php-zip sendmail
 
 # Install wp-cli
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \

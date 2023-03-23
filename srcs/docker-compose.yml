@@ -2,13 +2,13 @@ version: "3"
 
 services:
   nginx:
+    container_name: nginx
     build: requirements/nginx
-    image: nginx
     restart: always
     ports:
       - "443:443"
     volumes:
-      - wordpress_data:/var/www/html
+      - wordpress_data:/var/www/
     depends_on:
       - wordpress
       - adminer
@@ -17,11 +17,11 @@ services:
       - inception_network
 
   wordpress:
+    container_name: wordpress
     build: requirements/wordpress
-    image: wordpress
     restart: always
     volumes:
-      - wordpress_data:/var/www/html
+      - wordpress_data:/var/www
     env_file:
       - .env
     networks:
@@ -30,8 +30,8 @@ services:
       - mariadb
 
   mariadb:
+    container_name: mariadb
     build: requirements/mariadb
-    image: mariadb
     restart: always
     volumes:
       - mariadb_data:/var/lib/mysql
@@ -41,30 +41,30 @@ services:
       - inception_network
     
   static_website:
+    container_name: static_website
     build:  requirements/bonus/static_website
-    image: static_website
     restart: always
     networks:
       - inception_network
   
   adminer:
+    container_name: adminer
     build: requirements/bonus/adminer
-    image: adminer
     restart: always
     networks:
       - inception_network
     depends_on:
       - mariadb
   
-  redis_cache:
+  redis:
+    container_name: redis
     build: requirements/bonus/redis_cache
-    image: redis_cache
     restart: always
     networks:
       - inception_network
   ftp:
+    container_name: ftp
     build: requirements/bonus/ftp_server
-    image: ftp
     restart: always
     ports:
       - "21:21"
@@ -77,6 +77,19 @@ services:
       - inception_network
     depends_on:
       - wordpress
+  cadvisor:
+    container_name: cadvisor
+    build: ./requirements/bonus/personal_choice
+    ports:
+      - "8080:8080"
+    networks:
+      - inception_network
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro 
+      # - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
 
 volumes:
   wordpress_data:
